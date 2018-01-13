@@ -1,0 +1,336 @@
+import java.io.*;
+import java.util.*;
+
+public class SetOfStacks{
+	
+	ArrayList<Stack> stacks=new ArrayList<>();
+	public int capacity;
+	
+	public SetOfStacks(int capacity) {
+		this.capacity=capacity;
+	}
+	
+	public Stack getLastStack() {
+		if(stacks.size()==0)
+			return null;
+		
+		return stacks.get(stacks.size()-1);
+	}
+	
+	private class Stack implements Iterable<Integer>{
+		
+		public Node head;
+		public int size;
+		public int capacity;
+		
+		public boolean isEmpty() {
+			return size==0;
+		}
+		
+		public int removeBottom() {
+			Node h=head;
+			Node prev=null;
+			Node curr=head;
+			while(curr!=null && curr.next!=null) {
+				prev=curr;
+				curr=curr.next;
+			}
+			
+			prev.next=null;
+			return curr.data;
+		}
+		
+		
+		public boolean isAtCapacity() {
+			return size<capacity;
+		}
+		
+		public Stack(int capacity) {
+			this.capacity=capacity;
+			this.head=null;
+			size=0;
+		}
+		
+		public void addFirst(int data) {
+			head=new Node(data,head);
+			size++;
+		}
+		
+		public int getFirst() {
+			if(head==null) {
+				throw new NoSuchElementException();
+			}
+			return head.data;
+		}
+		
+		public int removeFirst() {
+			Node temp=head;
+			if(temp!=null) {
+				head=temp.next;
+				size--;
+			}
+			return temp.data;
+		}
+		
+		public void addLast(int data) {
+			if(head==null)
+				throw new NoSuchElementException();
+			
+			Node temp=head;
+			while(temp.next != null) {
+				temp=temp.next;
+			}
+			temp.next=new Node(data,null);
+			size++;
+		}
+		
+		public int getLast() {
+			if(head==null)
+				throw new NoSuchElementException();
+			Node temp=head;
+			while(temp!=null && temp.next!=null) {
+				temp=temp.next;
+			}
+			return temp.data;
+		}
+		
+		public void clear() {
+			head=null;
+			size=0;
+		}
+		
+		public boolean contains(int data) {
+			if(head==null)
+				throw new NoSuchElementException();
+			
+			Node h=head;
+			while(h.next != null) {
+				if(h.data==data) {
+					return true;
+				}
+				h=h.next;
+			}
+			return false;
+		}
+		
+		public int get(int position) {
+			if(head==null)
+				throw new IndexOutOfBoundsException();
+			
+			Node h=head;
+			for(int i=0;i<position;i++) {
+				h=h.next;
+			}
+			if(h == null)
+				throw new IndexOutOfBoundsException();
+			return h.data;
+		}
+		
+		public Node reverse(Node h) {
+			Node prev=null;
+			Node curr=h;
+			Node next=null;
+			
+			while(curr!=null) {
+				next=curr.next;
+				curr.next=prev;
+				prev=curr;
+				curr=next;
+			}
+			h=prev;
+			return prev;
+		}
+		
+		public String toString() {
+			Node temp=reverse(head);
+			StringBuffer result=new StringBuffer();
+			Node t=temp;
+			while(temp!=null) {
+				result.append(temp.data+" ");
+				temp=temp.next;
+			}
+			return result.toString();
+		}
+		
+		public void remove(int key) {
+			if(head==null)
+				throw new RuntimeException("Cannot remove");
+			
+			if(head.data==key) {
+				head=head.next;
+				return;
+			}
+			
+			Node curr=head;
+			Node prev=null;
+			
+			while(curr!=null && !(curr.data==key)) {
+				prev=curr;
+				curr=curr.next;
+			}
+			
+			if(curr==null)
+				throw new RuntimeException();
+			
+			prev.next=curr.next;
+			size--;
+		}
+		
+
+		@Override
+		public Iterator iterator() {
+			return new StackIterator();
+		}
+		
+		public class StackIterator implements Iterator{
+			
+			public Node nextNode;
+
+			@Override
+			public boolean hasNext() {
+				return nextNode!=null;
+			}
+
+			@Override
+			public Integer next() {
+				if(!hasNext())
+					throw new NoSuchElementException();
+				int res=nextNode.data;
+				nextNode=nextNode.next;
+				return res;
+			}
+			
+		}
+		
+		public void push(int data) {
+			if(isAtCapacity()) {
+				System.out.println(data+" pushed into the stack");
+				addFirst(data);
+			}
+		}
+		
+		public int pop() {
+			if(head==null) {
+				throw new NoSuchElementException();
+			}
+			
+			Node current=head;
+			head=head.next;
+			size--;
+			System.out.println(current.data+" popped from the stack");
+			return current.data;
+		}
+		
+		public int peek() {
+			if(head==null) {
+				throw new NoSuchElementException();
+			}
+			
+			Node current=head;
+			return current.data;
+		}
+		
+		
+		
+		private class Node{
+			
+			private int data;
+			private Node next;
+			
+			public Node(int data,Node next) {
+				this.data=data;
+				this.next=next;
+			}
+			
+			
+		}
+		
+	}
+	
+	public static void main(String args[]) {
+		SetOfStacks ss=new SetOfStacks(5);
+		ss.push(10); 
+		ss.push(20); 
+		ss.push(30);
+		ss.push(40); 
+		ss.push(50); 
+		ss.push(60);
+		ss.push(70); 
+		ss.push(80); 
+		ss.push(90);
+		ss.push(100);
+		ss.push(110);
+		ss.push(120);
+		ss.push(130);
+		ss.push(140);
+		ss.push(150);
+		//System.out.println();
+		System.out.println();
+		System.out.println(ss.popAt(1));
+	
+		
+		System.out.println(ss);
+	}
+
+	public void push(int data) {
+		Stack last=getLastStack();
+		if(last!=null && last.isAtCapacity()) {
+			last.push(data);
+		}else {
+			Stack st=new Stack(capacity);
+			System.out.println("Stack "+(stacks.size()+1)+" Initialized");
+			st.push(data);
+			stacks.add(st);
+		}
+	}
+	
+	public int pop() {
+		Stack st=getLastStack();
+		int data=st.pop();
+		if(st.size==0) {
+			stacks.remove(stacks.size()-1);
+			System.out.println("Stack "+stacks.size()+" Removed");
+		}
+			
+		    
+		return data;
+	}
+	
+	public String toString() {
+		StringBuilder sb=new StringBuilder();
+		for(Stack st:stacks) {
+			sb.append(st);
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+	
+	public int popAt(int index) {
+		if(stacks.size()==0)
+			throw new RuntimeException("Set of stacks if empty");
+		if(index >= stacks.size() || index < 0)
+			throw new RuntimeException("Set of stacks if empty");
+		
+		return shift(index,true);
+	}
+	
+	public int shift(int index,boolean remove) {
+		Stack stack=stacks.get(index);
+		int removed;
+		if(remove) {
+			removed=stack.pop();
+		}else {
+			removed=stack.removeBottom();
+		}
+		if(stack.isEmpty()) {
+			stacks.remove(index);
+		}else {
+			if(stacks.size() > index+1) {
+				int nextRemove=shift(index+1,false);
+				stack.push(nextRemove);
+			}
+		}
+		return removed;
+	}
+	
+}
