@@ -1,0 +1,45 @@
+import java.io.*;
+import java.util.Stack;
+import java.util.*;
+
+public class TowersOfHanoi {
+	
+	public static int N;
+	public static Stack<Integer>[] tower=new Stack[4];
+	
+	public static void main(String args[]) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of disks: ");
+		int n = sc.nextInt();
+		N=n;
+		tower[1]=new Stack<Integer>();
+		tower[2]=new Stack<Integer>();
+		tower[3]=new Stack<Integer>();
+		toh(n);
+	}
+	
+	public static void toh(int n) {
+		for(int i=n;i>0;i--) {
+			tower[1].push(i);
+		}
+		display();
+		move(n,1,2,3);
+	}
+	
+	public static void display() {
+		System.out.println(tower[1]);
+		System.out.println(tower[2]);
+		System.out.println(tower[3]);
+	}
+	
+	public static void move(int n,int a,int b,int c) {
+		if(n > 0) {
+			move(n-1,a,c,b);
+			int d=tower[a].pop();
+			tower[c].push(d);
+			display();
+			move(n-1,b,a,c);
+		}
+	}
+
+}
