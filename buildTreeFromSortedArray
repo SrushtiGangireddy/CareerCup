@@ -1,0 +1,12 @@
+ public Node buildTree(int[] sortedArray,int start,int end) {
+    	int mid=start+(end-start)/2;
+    	
+    	Node root=new Node(sortedArray[mid]);
+    	
+    	if(start<=mid-1)
+    		root.left=buildTree(sortedArray,start,mid-1);
+    	if(mid+1<=end)
+    		root.right=buildTree(sortedArray,mid+1,end);
+    	return root;
+    	
+    }
