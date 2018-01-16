@@ -1,0 +1,53 @@
+import java.io.*;
+import java.util.*;
+
+public class LCA_BinaryTree {
+	
+	TreeNode root;
+	
+	public TreeNode findLCA(int n1,int n2) {
+		return findLCA(root,n1,n2);
+	}
+	
+	public TreeNode findLCA(TreeNode node,int n1,int n2) {
+		if(node==null)
+			return null;
+		
+		if(node.data==n1 || node.data==n2)
+			return node;
+		
+		TreeNode leftLCA=findLCA(node.left, n1, n2);
+		TreeNode rightLCA=findLCA(node.right, n1, n2);
+		
+		if(leftLCA!=null&&rightLCA!=null)
+			return node;
+		
+		return (leftLCA!=null)?leftLCA:rightLCA;
+	}
+	
+	public static void main(String args[]) {
+		LCA_BinaryTree tree=new LCA_BinaryTree();
+		tree.root = new TreeNode(1);
+        tree.root.left = new TreeNode(2);
+        tree.root.right = new TreeNode(3);
+        tree.root.left.left = new TreeNode(4);
+        tree.root.left.right = new TreeNode(5);
+        tree.root.right.left = new TreeNode(6);
+        tree.root.right.right = new TreeNode(7);
+        System.out.println(tree.findLCA(2, 5).data);
+	}
+	
+
+}
+
+class TreeNode{
+	int data;
+	TreeNode left,right;
+	
+	public TreeNode(int data) {
+		this.data=data;
+		left=null;
+		right=null;
+	}
+	
+}
