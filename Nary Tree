@@ -1,0 +1,152 @@
+import java.io.*;
+import java.util.*;
+
+public class NaryTree<T> {
+
+	private GenericNode<T> root;
+	
+	public NaryTree(){
+		super();
+	}
+	
+	public GenericNode<T> getRoot(){
+		return this.root;
+	}
+	
+	public void setRoot(GenericNode<T> root) {
+		this.root=root;
+	}
+	
+	public int getNodeCount() {
+		int count=0;
+		if(root!=null) {
+			count=getNumberOfNodes(root)+1;
+		}
+		return count;
+	}
+	
+	public int getNumberOfNodes(GenericNode<T> node) {
+		int count=node.numberOfChildren();
+		for(GenericNode<T> child:node.getChildren()) {
+			count+=getNumberOfNodes(child);
+		}
+		return count;
+	}
+	
+	public boolean exists(T data)
+	{
+		return (find(data)!=null);
+	}
+	
+	public GenericNode<T> find(T data){
+		GenericNode<T> node=null;
+		if(root!=null)
+			return find(root,data);
+		return node;
+	}
+	
+	public GenericNode<T> find(GenericNode<T> curr,T data){
+		GenericNode<T> node=null;
+		int i=0;
+		if(curr.getData()==data)
+			node=curr;
+		else if(curr.hasChildren()) {
+			i=0;
+			while(node==null && i<curr.numberOfChildren()) {
+				node=find(curr.getChildAt(i),data);
+				i++;
+			}
+		}
+		return node;
+	}
+	
+	public boolean isEmpty() {
+		return root==null;
+	}
+	
+	
+	
+}
+
+class GenericNode<T>{
+	private T data;
+	private List<GenericNode<T>> children;
+	private GenericNode<T> parent;
+	
+	public GenericNode() {
+		super();
+		children=new ArrayList<GenericNode<T>>();
+	}
+	
+	public GenericNode(T data) {
+		this();
+		setData(data);
+	}
+	
+	public void setParent(GenericNode<T> parent) {
+		this.parent=parent;
+	}
+	
+	public GenericNode getParent() {
+		return this.parent;
+	}
+	
+	public List<GenericNode<T>> getChildren(){
+		return this.children;
+	}
+	
+	public int numberOfChildren() {
+		return getChildren().size();
+	}
+	
+	public boolean hasChildren() {
+		return (numberOfChildren()>0);
+	}
+	
+	public void setChildren(List<GenericNode<T>> children) {
+		for(GenericNode<T> child:children) {
+			child.parent=this;
+		}
+		this.children=children;
+	}
+	
+	public void addChild(GenericNode<T> child) {
+		child.parent=this;
+		children.add(child);
+	}
+	
+	public void addChildAt(int index,GenericNode<T> child) throws IndexOutOfBoundsException{
+		child.parent=this;
+		children.add(index, child);
+	}
+	
+	public void removeChildren() {
+		children=new ArrayList<GenericNode<T>>();
+	}
+	
+	public void removeChildAt(int index)throws IndexOutOfBoundsException{
+		children.remove(index);
+	}
+	
+	public GenericNode getChildAt(int index)throws IndexOutOfBoundsException{
+		return children.get(index);
+	}
+	
+	public T getData() {
+		return this.data;
+	}
+	
+	public void setData(T data) {
+		this.data=data;
+	}
+	
+	public String toString() {
+		return getData().toString();
+	}
+	
+	
+	
+	
+	
+	
+}
