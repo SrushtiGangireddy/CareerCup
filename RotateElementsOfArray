@@ -1,0 +1,40 @@
+import java.io.*;
+import java.util.*;
+
+public class rotateArrayByNElements {
+
+	public static void main(String args[]){
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the sizes of the array ");
+		int size=sc.nextInt();
+		int[] array=new int[size];
+		
+		for(int i=0;i<size;i++) {
+			array[i]=sc.nextInt();
+		}
+		
+		System.out.println("How many number of elements should be rotated? ");
+		int d=sc.nextInt();
+		
+		rotate(array,d);
+		
+		for(Integer a:array) {
+			System.out.print(a+" ");
+		}
+		
+	}
+	
+	public static void rotate(int[] array,int d) {
+		
+		
+		for(int c=0;c<d;c++) {
+		
+		int temp;
+		temp=array[0];
+		for(int i=0;i<array.length-1;i++) {
+			array[i]=array[i+1];
+		}
+		array[array.length-1]=temp;
+	}
+	}
+}
