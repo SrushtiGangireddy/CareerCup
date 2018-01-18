@@ -1,0 +1,64 @@
+import java.io.*;
+import java.util.*;
+public class SmallestCommonElements {
+
+	public static void main(String args[]) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the sizes of three arrays ");
+		int aSize=sc.nextInt();
+		int bSize=sc.nextInt();
+		int cSize=sc.nextInt();
+		int[] a=new int[aSize];
+		int[] b=new int[bSize];
+		int[] c=new int[cSize];
+		for(int arr=0;arr<3;arr++) {
+			System.out.println("Enter the elements of "+(arr+1)+"th array ");
+			int size=0;
+			int[] array=new int[size];
+			if(arr==0) {
+				size=aSize;
+				array=a;
+			}
+			else if(arr==1) {
+				size=bSize;
+				array=b;
+			}
+			else if(arr==2) {
+				size=cSize;
+				array=c;
+			}
+				
+			
+			for(int i=0;i<size;i++) {
+				array[i]=sc.nextInt();
+			}
+			
+		}
+		
+		findCommon(a,b,c);
+		
+	}
+	
+	public static void findCommon(int[] a,int[] b,int [] c) {
+		int i=0,j=0,k=0;
+		TreeSet<Integer> common=new TreeSet<Integer>();
+		while(i<a.length && j<b.length && k<c.length) {
+			if(a[i]==b[j] && b[j]==c[k]) {
+				common.add(a[i]);
+				i++;
+				j++;
+				k++;
+			}
+			else if(a[i]<b[j])
+				i++;
+			else if(b[j]<c[k])
+				j++;
+			else 
+				k++;
+		}
+		
+		System.out.println(common.first());
+	}
+	
+	
+}
