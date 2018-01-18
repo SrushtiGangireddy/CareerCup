@@ -1,0 +1,54 @@
+import java.io.*;
+import java.util.*;
+public class findLowHighIndex {
+
+	public static void main(String args[]){
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the sizes of the array ");
+		int size=sc.nextInt();
+		int[] array=new int[size];
+		
+		for(int i=0;i<size;i++) {
+			array[i]=sc.nextInt();
+		}
+		
+		System.out.println("Enter the search element ");
+		int key=sc.nextInt();
+		
+		int low=0;
+		int high=array.length-1;
+		
+		int first=findFirst(array,low,high,key,array.length);
+		int last=findLast(array, low, high, key, array.length);
+		
+		System.out.println("First at "+first+" Last at "+last);
+	}
+	
+	public static int findFirst(int[] arr,int low,int high,int key,int n) {
+		if(high>=low) {
+			int mid=low+((high-low)/2);
+			if((mid==0||key>arr[mid-1])&&arr[mid]==key)
+				return mid;
+			else if(key>arr[mid])
+				return findFirst(arr,mid+1,high,key,n);
+			else
+				return findFirst(arr,low,mid-1,key,n);
+		}
+		return -1;
+	}
+	
+	public static int findLast(int[] arr,int low,int high,int key,int n) {
+		if(high>=low) {
+			int mid=low+((high-low)/2);
+			if((mid==n-1||key<arr[mid+1])&&arr[mid]==key)
+				return mid;
+			else if(key<arr[mid])
+				return findLast(arr,low,mid-1,key,n);
+			else
+				return findFirst(arr,mid+1,high,key,n);
+		}
+		return -1;
+	}
+	
+	
+}
